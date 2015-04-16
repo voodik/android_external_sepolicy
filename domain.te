@@ -235,7 +235,7 @@ neverallow { domain -init } kernel:security setsecparam;
 neverallow { domain -init -system_server -ueventd -unconfineddomain } hw_random_device:chr_file *;
 
 # Ensure that all entrypoint executables are in exec_type.
-neverallow domain { file_type -exec_type }:file entrypoint;
+neverallow domain { file_type -exec_type -system_file}:file entrypoint;
 
 # Ensure that nothing in userspace can access /dev/mem or /dev/kmem
 neverallow { domain -rmt_placeholder -kernel -ueventd -init } kmem_device:chr_file *;
@@ -291,7 +291,7 @@ neverallow { domain -init -recovery } property_data_file:dir { create setattr re
 neverallow { domain -init -recovery } property_data_file:file { create setattr relabelfrom write append unlink link rename };
 
 # Only recovery should be doing writes to /system
-neverallow { domain -recovery } { system_file exec_type }:dir_file_class_set
+neverallow { domain -init -recovery } { system_file exec_type }:dir_file_class_set
     { create write setattr relabelfrom relabelto append unlink link rename };
 
 # Nothing should be writing to files in the rootfs.
